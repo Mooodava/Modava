@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صنایع توانبخشی مداوا</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app"></div>
+<script src="data.js"></script>
+<script>
+/* -------------------- icons -------------------- */
+function iconToilet(fg){
+  return `<svg viewBox="0 0 200 200" aria-hidden="true">
+    <rect x="66" y="26" width="68" height="46" rx="12" fill="${fg}" opacity="0.9"/>
+    <rect x="74" y="60" width="10" height="20" fill="${fg}" opacity="0.9"/>
+    <ellipse cx="100" cy="118" rx="62" ry="34" fill="${fg}"/>
+    <ellipse cx="100" cy="118" rx="40" ry="18" fill="#FBFAF6"/>
+    <path d="M46 128 Q40 168 62 176 L138 176 Q160 168 154 128 Z" fill="${fg}" opacity="0.85"/>
+  </svg>`;
+}
+function iconWalker(fg){
+  return `<svg viewBox="0 0 200 200" aria-hidden="true">
+    <rect x="40" y="44" width="16" height="96" rx="8" fill="${fg}"/>
+    <rect x="144" y="44" width="16" height="96" rx="8" fill="${fg}"/>
+    <rect x="40" y="44" width="120" height="14" rx="7" fill="${fg}"/>
+    <rect x="40" y="88" width="120" height="10" rx="5" fill="${fg}" opacity="0.7"/>
+    <circle cx="48" cy="150" r="12" fill="${fg}" opacity="0.9"/>
+    <circle cx="152" cy="150" r="12" fill="${fg}" opacity="0.9"/>
+    <rect x="42" y="140" width="12" height="20" rx="4" fill="${fg}" opacity="0.55"/>
+    <rect x="146" y="140" width="12" height="20" rx="4" fill="${fg}" opacity="0.55"/>
+  </svg>`;
+}
+function iconCane(fg, quad){
+  const feet = quad
+    ? `<circle cx="86" cy="176" r="6" fill="${fg}"/><circle cx="104" cy="180" r="6" fill="${fg}"/>
+       <circle cx="90" cy="188" r="0" /><circle cx="98" cy="168" r="6" fill="${fg}"/>`
+    : `<ellipse cx="100" cy="180" rx="10" ry="6" fill="${fg}" opacity="0.85"/>`;
+  return `<svg viewBox="0 0 200 200" aria-hidden="true">
+    <path d="M100 30 q-26 0 -26 26 q0 22 26 22" fill="none" stroke="${fg}" stroke-width="12" stroke-linecap="round"/>
+    <rect x="94" y="60" width="12" height="112" rx="6" fill="${fg}"/>
+    ${feet}
+  </svg>`;
+}
+function iconAccessory(fg){
+  return `<svg viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="46" cy="60" r="16" fill="${fg}" opacity="0.85"/>
+    <circle cx="154" cy="140" r="16" fill="${fg}" opacity="0.85"/>
+    <path d="M46 60 Q100 60 154 140" fill="none" stroke="${fg}" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="46" cy="60" r="6" fill="#FBFAF6"/>
+    <circle cx="154" cy="140" r="6" fill="#FBFAF6"/>
+  </svg>`;
+}
+function iconFor(cat, variantIndex, id){
+  const colors = ['#2F5D4E', '#C79A3E', '#1F4237'];
+  const fg = colors[variantIndex % colors.length];
+  if(cat === 'toilet') return iconToilet(fg);
+  if(cat === 'walker') return iconWalker(fg);
+  if(cat === 'cane') return iconCane(fg, id === 8);
+  return iconAccessory(fg);
+}
+
+/* -------------------- state -------------------- */
+const state = { view:'home', category:'all', productId:null, img:0 };
+const app = document.getElementById('app');
+
+function goHome(){ state.view='home'; render(); }
+function goProducts(cat){ state.view='products'; if(cat) state.category=cat; render(); }
+function setCategory(key){ state.category = key; render(); }
+function openProduct(id){ state.view='detail'; state.productId=id; state.img=0; render(); }
+function backFromDetail(){ state.view='products'; render(); }
+function setImg(i){ state.img = i; render(); }
+function nextImg(){
+  const p = PRODUCTS.find(x=>x.id===state.productId);
+  state.img = (state.img+1) % p.images.length;
+  render();
+}
+function prevImg(){
+  const p = PRODUCTS.find(x=>x.id===state.productId);
+  state.img = (state.img-1+p.images.length) % p.images.length;
+  render();
+}
+
+/* -------------------- render -------------------- */
+function render(){
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  if(state.view === 'home') return renderHome();
+  if(state.view === 'products') return renderProducts();
+  if(state.view === 'detail') return renderDetail();
+}
+
+function renderHome(){
+  app.innerHTML = `
+    <header class="topbar"><div class="wrap">
+      <button class="brand" onclick="goHome()">صنایع توانبخشی مداوا</button>
+    </div></header>
+
+    <section class="hero wrap">
+      <p class="msg">به مداوا خوش آمدید</p>
+      <h1>به ما درد دل افشا کن مداوا کردنش با ما </h1>
+      <div class="hero-image-wrap">
+  <div class="hero-arc"></div>
+  <img src="./images/Home-img.jpg" alt="مداوا" style="width:190px;height:190px;object-fit:contain;position:relative;z-index:5;">
+</div>
+      <button class="btn-primary" onclick="goProducts()">مشاهده محصولات</button>
+    </section>
+
+    <section class="wrap">
+      <div class="about about-text">
+        <h2>درباره مداوا</h2>
+        <p>
+شرکت مداوا با هدف طراحی و تولید تجهیزات کمک‌حرکتی و بهداشتی، تلاش می‌کند راهکارهایی مطمئن برای افزایش آسایش، استقلال و کیفیت زندگی افراد ارائه دهد.
+ما با تمرکز بر تولید انواع توالت‌های فرنگی، واکر، عصا و تجهیزات جانبی، محصولاتی را طراحی می‌کنیم که ترکیبی از استحکام، ایمنی، راحتی و سهولت استفاده باشند. در مداوا، کیفیت ساخت و توجه به نیاز واقعی کاربران، اصلی‌ترین معیار در تولید محصولات است.
+هدف ما این است که با ارائه محصولاتی کاربردی و قابل اعتماد، همراهی مطمئن برای خانواده‌ها و افرادی باشیم که به تجهیزات کمک‌حرکتی و بهداشتی نیاز دارند.</p>
+      </div>
+    </section>
+    <section class="wrap">
+  <div class="about">
+    <h2>تلفن تماس</h2>
+    <p>
+      جهت دریافت مشاوره، ثبت سفارش و ارتباط با کارشناسان مداوا با ما تماس بگیرید:
+      <br>
+      09144944249 - 09333169189
+    </p>
+  </div>
+</section>
+
+    <footer class="credit">آدرس : عجب شیر - شهرک صنعتی - کارگر غربی - نبش صنعت ۹ </footer>
+  `;
+}
+
+function renderProducts(){
+  const list = state.category === 'all'
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.cat === state.category);
+
+  const pills = CATEGORIES.map(c => `
+    <button class="cat-pill ${state.category===c.key?'active':''}" onclick="setCategory('${c.key}')">${c.label}</button>
+  `).join('');
+
+  const cards = list.map((p,idx) => `
+    <article class="card" onclick="openProduct(${p.id})" role="button" tabindex="0"
+      onkeydown="if(event.key==='Enter')openProduct(${p.id})">
+      <div class="card-img">
+  <img src="${p.imgCard}" alt="${p.name}">
+</div>
+      <div class="card-body">
+        <p class="card-tag">${CATEGORIES.find(c=>c.key===p.cat).label}</p>
+        <h3 class="card-name">${p.name}</h3>
+        <p class="card-desc">${p.short}</p>
+      </div>
+    </article>
+  `).join('');
+
+  app.innerHTML = `
+    <header class="topbar"><div class="wrap">
+      <button class="back-btn" onclick="goHome()">بازگشت</button>
+      <span class="page-title">محصولات</span>
+    </div></header>
+
+    <nav class="cat-bar wrap" style="padding-inline:24px;">${pills}</nav>
+
+    <section class="wrap">
+      <div class="grid">${cards || ''}</div>
+      ${list.length===0 ? '<p class="empty">محصولی در این دسته‌بندی یافت نشد.</p>' : ''}
+    </section>
+
+    <footer class="credit">صنایع توانبخشی مداوا  </footer>
+  `;
+}
+
+function renderDetail(){
+  const p = PRODUCTS.find(x => x.id === state.productId);
+  if(!p){ state.view='products'; return renderProducts(); }
+
+  const dots = TINTS.map((_,i) => `
+    <button class="dot ${i===state.img?'active':''}" aria-label="تصویر ${i+1}" onclick="setImg(${i})"></button>
+  `).join('');
+
+  app.innerHTML = `
+    <header class="topbar"><div class="wrap">
+      <button class="back-btn" onclick="backFromDetail()">بازگشت</button>
+      <span class="page-title">جزئیات محصول</span>
+    </div></header>
+
+    <section class="wrap detail">
+      <div class="carousel">
+        <div class="card-img">
+  <img src="${p.images[state.img]}" alt="${p.name}">
+</div>
+        <div class="carousel-nav">
+          <button class="nav-btn" aria-label="تصویر قبلی" onclick="prevImg()">‹</button>
+          <div class="dots">${dots}</div>
+          <button class="nav-btn" aria-label="تصویر بعدی" onclick="nextImg()">›</button>
+        </div>
+      </div>
+
+      <p class="detail-tag">${CATEGORIES.find(c=>c.key===p.cat).label}</p>
+      <h1 class="detail-title">${p.name}</h1>
+      <p class="detail-desc">${p.long}</p>
+      <div class="price-box">
+
+  <div class="price-card">
+    <span>قیمت نقدی</span>
+    <strong>${p.priceCash}</strong>
+  </div>
+
+  <div class="price-card">
+    <span>قیمت چک ۴۵ روزه</span>
+    <strong>${p.priceCheck}</strong>
+  </div>
+
+</div>
+    </section>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
