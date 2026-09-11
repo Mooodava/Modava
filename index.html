@@ -13,55 +13,6 @@
 <div id="app"></div>
 <script src="data.js"></script>
 <script>
-function iconToilet(fg){
-  return `<svg viewBox="0 0 200 200" aria-hidden="true">
-    <rect x="66" y="26" width="68" height="46" rx="12" fill="${fg}" opacity="0.9"/>
-    <rect x="74" y="60" width="10" height="20" fill="${fg}" opacity="0.9"/>
-    <ellipse cx="100" cy="118" rx="62" ry="34" fill="${fg}"/>
-    <ellipse cx="100" cy="118" rx="40" ry="18" fill="#FBFAF6"/>
-    <path d="M46 128 Q40 168 62 176 L138 176 Q160 168 154 128 Z" fill="${fg}" opacity="0.85"/>
-  </svg>`;
-}
-function iconWalker(fg){
-  return `<svg viewBox="0 0 200 200" aria-hidden="true">
-    <rect x="40" y="44" width="16" height="96" rx="8" fill="${fg}"/>
-    <rect x="144" y="44" width="16" height="96" rx="8" fill="${fg}"/>
-    <rect x="40" y="44" width="120" height="14" rx="7" fill="${fg}"/>
-    <rect x="40" y="88" width="120" height="10" rx="5" fill="${fg}" opacity="0.7"/>
-    <circle cx="48" cy="150" r="12" fill="${fg}" opacity="0.9"/>
-    <circle cx="152" cy="150" r="12" fill="${fg}" opacity="0.9"/>
-    <rect x="42" y="140" width="12" height="20" rx="4" fill="${fg}" opacity="0.55"/>
-    <rect x="146" y="140" width="12" height="20" rx="4" fill="${fg}" opacity="0.55"/>
-  </svg>`;
-}
-function iconCane(fg, quad){
-  const feet = quad
-    ? `<circle cx="86" cy="176" r="6" fill="${fg}"/><circle cx="104" cy="180" r="6" fill="${fg}"/>
-       <circle cx="90" cy="188" r="0" /><circle cx="98" cy="168" r="6" fill="${fg}"/>`
-    : `<ellipse cx="100" cy="180" rx="10" ry="6" fill="${fg}" opacity="0.85"/>`;
-  return `<svg viewBox="0 0 200 200" aria-hidden="true">
-    <path d="M100 30 q-26 0 -26 26 q0 22 26 22" fill="none" stroke="${fg}" stroke-width="12" stroke-linecap="round"/>
-    <rect x="94" y="60" width="12" height="112" rx="6" fill="${fg}"/>
-    ${feet}
-  </svg>`;
-}
-function iconAccessory(fg){
-  return `<svg viewBox="0 0 200 200" aria-hidden="true">
-    <circle cx="46" cy="60" r="16" fill="${fg}" opacity="0.85"/>
-    <circle cx="154" cy="140" r="16" fill="${fg}" opacity="0.85"/>
-    <path d="M46 60 Q100 60 154 140" fill="none" stroke="${fg}" stroke-width="14" stroke-linecap="round"/>
-    <circle cx="46" cy="60" r="6" fill="#FBFAF6"/>
-    <circle cx="154" cy="140" r="6" fill="#FBFAF6"/>
-  </svg>`;
-}
-function iconFor(cat, variantIndex, id){
-  const colors = ['#2F5D4E', '#C79A3E', '#1F4237'];
-  const fg = colors[variantIndex % colors.length];
-  if(cat === 'toilet') return iconToilet(fg);
-  if(cat === 'walker') return iconWalker(fg);
-  if(cat === 'cane') return iconCane(fg, id === 8);
-  return iconAccessory(fg);
-}
 const state = { view:'home', category:'all', productId:null, img:0 };
 const app = document.getElementById('app');
 
