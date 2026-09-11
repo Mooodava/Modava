@@ -13,7 +13,6 @@
 <div id="app"></div>
 <script src="data.js"></script>
 <script>
-/* -------------------- icons -------------------- */
 function iconToilet(fg){
   return `<svg viewBox="0 0 200 200" aria-hidden="true">
     <rect x="66" y="26" width="68" height="46" rx="12" fill="${fg}" opacity="0.9"/>
@@ -63,8 +62,6 @@ function iconFor(cat, variantIndex, id){
   if(cat === 'cane') return iconCane(fg, id === 8);
   return iconAccessory(fg);
 }
-
-/* -------------------- state -------------------- */
 const state = { view:'home', category:'all', productId:null, img:0 };
 const app = document.getElementById('app');
 
@@ -84,8 +81,6 @@ function prevImg(){
   state.img = (state.img-1+p.images.length) % p.images.length;
   render();
 }
-
-/* -------------------- render -------------------- */
 function render(){
   window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
   if(state.view === 'home') return renderHome();
