@@ -245,3 +245,10 @@
 .price-card strong{
   font-size:18px;
 }
+
+.card-more{
+  margin:8px 0 0;
+  color:#9a9a9a;
+  font-size:0.78rem;
+  font-weight:400;
+}
